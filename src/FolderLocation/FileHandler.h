@@ -11,7 +11,7 @@ std::string path;
 protected:
 public:
 explicit FileHandler(const std::string &path);
-std::vector<std::string> GetFiles() const; 
+std::vector<std::string> GetFiles(); 
 
 
 

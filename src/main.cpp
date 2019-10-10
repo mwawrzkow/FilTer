@@ -30,6 +30,9 @@ void getexepath(const std::string exeLocation, std::string &filelocation) {
 
 int main() {
     const char* env_p = std::getenv("HOME");
+	std::string abc(env_p);
+	abc += "/test.yaml";
+	Handler Handle(abc);
 	
 	
 }

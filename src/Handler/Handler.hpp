@@ -7,6 +7,8 @@
 class Handler{
     std::string HomeDir;
     yaml_reader config;
+    void loop();
     public:
     Handler(std::string);
+
 };

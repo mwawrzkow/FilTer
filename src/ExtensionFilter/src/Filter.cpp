@@ -15,13 +15,14 @@ Folder::Folder(std::vector<Extension> extensions) : behavior(extensions){
 
 }
 
-void Folder::saveFileList(std::initializer_list<std::string> List){
+void Folder::saveFileList(std::vector<std::string> List){
 	FileList.clear();
 	FileList = std::vector<std::string>(List);
 }
 
 std::vector<std::tuple<std::string,std::string> > Folder::getOrderList(){
 	std::vector<std::tuple<std::string,std::string> > retVal;
+	//FIXME: Order assigment 
 	for(auto file : FileList) {
 		for(auto interaction: behavior) {
 			if(interaction.DoesExtensionMatch(file))
@@ -69,13 +70,34 @@ bool Folder::Extension::DoesApplyToAllFiles()
 }
 
 std::string Folder::Extension::NewFileLocation(std::string file){
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+const char slash = 0x5C;
 
+#else
+const char slash = 0x2F;
+#endif
+
+	if(this->changeName)
+	{
+		return this->ChangeNameTo + this->MoveTo;
+	}else{
+	std::size_t temp;
+	temp = file.find_last_of(slash);
+	file.erase(file.begin(), file.begin()+temp);
+	return this->MoveTo + file;
+	}
 }
 
 
 }
 
 yaml_reader::yaml_reader(std::string filename):FileLoc(filename){
+	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+const char slash = 0x5C;
+
+#else
+const char slash = 0x2F;
+#endif
 	YAML::Node config = YAML::LoadFile(filename);
 	int mode; 
 	if(config["mode"]){
@@ -93,6 +115,8 @@ yaml_reader::yaml_reader(std::string filename):FileLoc(filename){
 		throw std::logic_error("Not Supported Type");
 		break;
 	}
+	std::size_t Where= FileLoc.find_last_of(slash);
+	FileLoc.erase(FileLoc.end() + Where, FileLoc.end());
 }
 
 void yaml_reader::addConfig(YAML::Node  node){

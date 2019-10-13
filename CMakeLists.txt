@@ -11,8 +11,7 @@ if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
-add_library(FileHandler src/FolderLocation/FileHandler.cpp
-                        src/FileHolder/Holder.cpp)
+add_library(FileHandler src/FolderLocation/FileHandler.cpp)
 add_library(Handler src/Handler/Handler.cpp)
 
 add_executable(FilTer src/main.cpp)

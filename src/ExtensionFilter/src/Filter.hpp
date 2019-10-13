@@ -14,7 +14,7 @@ std::vector<Extension> behavior;
 std::vector<std::string> FileList;
 public:
     Folder(std::vector<Extension>);
-    void saveFileList(std::initializer_list<std::string>);
+    void saveFileList(std::vector<std::string>);
     std::vector<std::tuple<std::string,std::string>> getOrderList();
 public:
 class Extension{

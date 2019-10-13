@@ -1,6 +1,6 @@
 #include "Handler/Handler.hpp"
 #include  <iostream>
-
+//TODO: Create GUI
 
 //https://github.com/mwawrzkow/colo/blob/master/src/FileIOController.h#L11
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
@@ -32,7 +32,10 @@ int main() {
     const char* env_p = std::getenv("HOME");
 	std::string abc(env_p);
 	abc += "/test.yaml";
+
+	//TODO: Create Handler Loop 
 	Handler Handle(abc);
+	Handle.loop();
 	
 	
 }

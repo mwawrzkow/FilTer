@@ -1,15 +1,13 @@
 #include "Filter.hpp"
 #include <functional>
 #include <iostream>
-#ifdef _WIN32
-const static char shash = '\/';
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+const char slash = 0x5C;
+
+#else
+const char slash = 0x2F;
 #endif
-
-#ifdef linux
-const static char slash = '\\';
-#endif
-
 namespace Filter {
 Folder::Folder(std::vector<Extension> extensions) : behavior(extensions){
 
@@ -57,6 +55,9 @@ Folder::Extension::Extension(std::initializer_list<std::string>List,std::string 
 {
 }
 bool Folder::Extension::DoesExtensionMatch(std::string extension){
+	std::size_t where = extension.find_last_of(".");
+	extension.erase(extension.begin(),extension.begin() + ( where));
+
 	for(auto e: Extensions) {
 		if(e == extension) {
 			return true;
@@ -70,12 +71,6 @@ bool Folder::Extension::DoesApplyToAllFiles()
 }
 
 std::string Folder::Extension::NewFileLocation(std::string file){
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-const char slash = 0x5C;
-
-#else
-const char slash = 0x2F;
-#endif
 
 	if(this->changeName)
 	{
@@ -115,8 +110,6 @@ const char slash = 0x2F;
 		throw std::logic_error("Not Supported Type");
 		break;
 	}
-	std::size_t Where= FileLoc.find_last_of(slash);
-	FileLoc.erase(FileLoc.end() + Where, FileLoc.end());
 }
 
 void yaml_reader::addConfig(YAML::Node  node){
@@ -130,7 +123,7 @@ void yaml_reader::setConfigs(YAML::Node node){
 	{
 		std::vector<std::string> extensions;
 		std::string shouldMove;
-		for(const auto &c : node["Extensions"])
+		for(const auto &c : e["Extensions"])
 			extensions.push_back(c.as<std::string>());
 		if(e["MoveToDir"])
 		{
@@ -149,6 +142,9 @@ void yaml_reader::setConfigs(YAML::Node node){
 		List.push_back(Filter::Folder::Extension(extensions,shouldMove,changeName,newName));
 	}
 	
+	std::size_t Where= FileLoc.find_last_of(slash);
+	FileLoc.erase(FileLoc.begin() + (Where+1), FileLoc.end());
+	std::cout << FileLoc << std::endl;
 	Folder.reset(new std::tuple<std::string,Filter::Folder>(FileLoc,Filter::Folder(List)));
 }
 std::vector<std::tuple<std::string, Filter::Folder>> yaml_reader::getWatchDog(){

@@ -34,16 +34,21 @@ bool FileHandler::MoveFile(std::string from, std::string to){
     boost::filesystem::directory_iterator end_itr;
     std::vector<std::string> Dirs;
     int rerename = 0;
+    std::string tofinal = to;
     for(boost::filesystem::directory_iterator itr(pth); itr!=end_itr; itr++ )
     {
-        if(itr->path().string() == to){
+        if(itr->path().string() == tofinal){
             rerename++;
+	    std::string tmpname = to;
+	    std::size_t where = tmpname.find_last_of(".");
+	    std::string extension = tmpname.substr(where, tmpname.size());
+	    tmpname.erase(tmpname.begin()+where,tmpname.end());
+	    tofinal = tmpname + std::to_string(rerename) + extension;
+	    itr = boost::filesystem::directory_iterator(pth);
         }
     }
     //Deletes the extension
-    if(rename > 0)
-    to+= std::to_string(rerename);
-    boost::filesystem::rename(from,to);
+    boost::filesystem::rename(from,tofinal);
 }
 std::string FileHandler::resolve(std::string file){
     //https://github.com/mwawrzkow/colo/blob/master/src/FileIOController.h#L11

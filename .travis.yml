@@ -9,4 +9,4 @@ before_install:
   - echo $LANG
   - echo $LC_ALL
   - if [ $TRAVIS_OS_NAME == linux ]; then ./scripts/dependencies.sh; fi
-script: ./build.sh
+script: ./.build.sh

@@ -130,7 +130,7 @@ void yaml_reader::setConfigs(YAML::Node node){
 	{
 		std::vector<std::string> extensions;
 		std::string shouldMove;
-		for(const auto &c : node["Extensions"])
+		for(const auto &c : e["Extensions"])
 			extensions.push_back(c.as<std::string>());
 		if(e["MoveToDir"])
 		{

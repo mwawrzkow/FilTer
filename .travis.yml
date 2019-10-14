@@ -1,6 +1,6 @@
 nguage: cpp
 sudo: required
-dist: trusty
+dist: bionic
 addons:
     apt:
      sources:

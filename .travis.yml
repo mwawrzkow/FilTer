@@ -1,12 +1,14 @@
 nguage: cpp
 sudo: required
 dist: bionic
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y boost-latest
+  - sudo apt-get install -y ubuntu-toolchain-r-test
+
 addons:
     apt:
-     sources:
-      - boost-latest
-      - ubuntu-toolchain-r-test
-     packages:
+      packages:
       - gcc-7
       - g++-7
       - libboost1.55-all-dev

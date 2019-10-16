@@ -4,7 +4,6 @@ Handler::Handler(std::string configFile):config(configFile){}
 
 void Handler::loop(){
 auto list = config.getWatchDog();
-std::cout << list.size() << std::endl;
 for(auto &e: list){
     IO.setpath(std::get<0>(e));
     auto FileList = IO.GetFiles();

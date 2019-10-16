@@ -144,7 +144,6 @@ void yaml_reader::setConfigs(YAML::Node node){
 	
 	std::size_t Where= FileLoc.find_last_of(slash);
 	FileLoc.erase(FileLoc.begin() + (Where+1), FileLoc.end());
-	std::cout << FileLoc << std::endl;
 	Folder.reset(new std::tuple<std::string,Filter::Folder>(FileLoc,Filter::Folder(List)));
 }
 std::vector<std::tuple<std::string, Filter::Folder>> yaml_reader::getWatchDog(){

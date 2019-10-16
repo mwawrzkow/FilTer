@@ -6,7 +6,7 @@ enable_testing()
 
 add_subdirectory(src/ExtensionFilter/)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
-
+find_package(Threads)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
@@ -21,7 +21,7 @@ target_link_libraries(FileHandler
   ${Boost_SYSTEM_LIBRARY}
 )
 
-target_link_libraries(Handler FileHandler Filter)
+target_link_libraries(Handler FileHandler Filter ${CMAKE_THREAD_LIBS_INIT})
 
 target_link_libraries(FilTer Handler)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

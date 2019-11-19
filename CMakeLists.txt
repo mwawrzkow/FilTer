@@ -31,7 +31,7 @@ target_link_libraries(FileHandler
 target_link_libraries(Handler FileHandler Filter ${CMAKE_THREAD_LIBS_INIT})
 
 target_link_libraries(FilTer Handler)
-target_link_libraries(FilTer ConsoleGui)
+#target_link_libraries(FilTer ConsoleGui)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)

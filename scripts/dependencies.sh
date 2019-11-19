@@ -15,5 +15,7 @@ cd ../..
 
 git clone https://github.com/jarro2783/cxxopts.git cxxopts
 cd cxxopts
-mkdir build && cmake .. && make && sudo make install
-
+mkdir build 
+cd build
+cmake .. 
+make && sudo make install

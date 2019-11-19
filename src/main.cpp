@@ -1,3 +1,4 @@
+#include <cxxopts.hpp>
 #include "Handler/Handler.hpp"
 #include  <iostream>
 #include <thread>
@@ -36,25 +37,66 @@ void ThreadLoop(std::reference_wrapper<Handler> handle)
 	__DoesThreadWorks = true;
 	auto x1 = std::chrono::system_clock::now();
 	do{
-	if(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - x1).count() > InterVal)
-	{
 	handle.get().loop();
 	x1 = std::chrono::system_clock::now();
-	}
 	if(_EXIT)
 	{
 		__DoesThreadWorks = false;
 		return;
 	}
+	std::this_thread::sleep_for(std::chrono::seconds(InterVal));
 	}while(true);
 	}
-int main() {
-    const char* env_p = std::getenv("HOME");
-	std::string abc(env_p);
-	abc += "/.config.yaml";
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+//!Pass
+#else
+cxxopts::Options options("FilTer", "The Files sorter");
+void noGui(std::string);
+void Gui(std::string);
+void LoadDefaultSettings(std::string&);
+int main(int argc,char *argv[]) {
+
+    std::string mainConfig;
+    options.add_options()
+	    ("q,quiet", "quiet run")
+	    ("f,file", "absolute config location", cxxopts::value<std::string>());
+    auto results = options.parse(argc,argv);
+    if(results.count("q") != 1 )
+    {
+	if(results.count("f") != 1){
+	LoadDefaultSettings(mainConfig);
+	Gui(mainConfig);
+	}
+	else
+	Gui(results["f"].as<std::string>());
+    }else{
+    	if(results.count("f") !=  1){
+		return EXIT_FAILURE;
+    	}
+	if(results["q"].as<bool>()){
+	try{
+		noGui(results["f"].as<std::string>());
+	}catch(cxxopts::OptionException& e){
+		std::cerr << e.what();
+		return EXIT_FAILURE;
+	}
+	}
+    }
+
 
 	//TODO: Create Handler Loop 
-	Handler Handle(abc);
+	
+	return EXIT_SUCCESS;
+}
+void LoadDefaultSettings(std::string& DefaultConfigLocation)
+{
+    const char* env_p = std::getenv("HOME");
+    DefaultConfigLocation = std::string(env_p);
+	DefaultConfigLocation += "/.config.yaml";
+}
+void Gui(std::string Config){
+
+	Handler Handle(Config);
 	std::thread handlerThread(ThreadLoop,std::ref(Handle));
 	Handle.loop();
 	std::string command;
@@ -66,6 +108,11 @@ int main() {
 		handlerThread.join();
 		}
 	}while(__DoesThreadWorks);
-	
-	return 0;
 }
+void noGui(std::string config){
+std::vector<int> a;
+
+
+
+}
+#endif

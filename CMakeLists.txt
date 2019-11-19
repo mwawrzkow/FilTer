@@ -5,7 +5,7 @@ include(CTest)
 enable_testing()
 
 add_subdirectory(src/ExtensionFilter/)
-add_subdirectory(src/ConsoleGui/)
+#add_subdirectory(src/ConsoleGui/)
 
 
 

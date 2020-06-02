@@ -74,7 +74,7 @@ std::string Folder::Extension::NewFileLocation(std::string file){
 
 	if(this->changeName)
 	{
-		return this->ChangeNameTo + this->MoveTo;
+		return this->MoveTo + "/" + this->ChangeNameTo;
 	}else{
 	std::size_t temp;
 	temp = file.find_last_of(slash);
